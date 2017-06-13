@@ -12,6 +12,7 @@
 #       are hard coded.
 #
 # TODO: Handle file not found exception
+#       Show information and/or animation during transfer
 
 # open input file -- READ mode
 # open output file -- CREATE mode
@@ -20,3 +21,27 @@
 # close files
 # eject USB dick 
 
+def copy(void):
+	break
+
+def main(void): 
+	print('Transfer script initiating...')
+
+	# Loop through list of read directories
+	read_dir = '\\pusehf0r\hfb_mcl\grp\HFB_Mcl\\'
+	write_dir = 'K:\MCL_BACKUP\Bond Quality'
+	read_file = open(read_dir, 'r')
+	write_file = open(write_dir, 'w+')
+
+
+
+	
+
+
+	read_dir.close()
+	write_dir.close()
+	read_file.close()
+	write_file.close()
+
+
+	break
