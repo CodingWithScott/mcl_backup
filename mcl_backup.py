@@ -5,7 +5,7 @@
 #
 # Author: Scott Felch
 # Build date: 6/12/17
-# Last updated: 6/6/26
+# Last updated: 6/13/26
 #
 # Note: If the location or name of files changes on the 
 #       network, that will disrupt this script. File paths
@@ -14,34 +14,38 @@
 # TODO: Handle file not found exception
 #       Show information and/or animation during transfer
 
-# open input file -- READ mode
-# open output file -- CREATE mode
-
 # perform file transfer
 # close files
-# eject USB dick 
+# eject USB dick -- is this possible from Python? 
+#					w/o admin access? maybe bad idea.
 
-def copy(void):
-	break
+import shutil
 
-def main(void): 
-	print('Transfer script initiating...')
+def copy_file(src, dest):
+    try:
+        shutil.copy(src, dest)
+    # eg. src and dest are the same file
+    except shutil.Error as e:
+        print('Error: %s' % e)
+    # eg. source or destination doesn't exist
+    except IOError as e:
+        print('Error: %s' % e.strerror)
 
-	# Loop through list of read directories
-	read_dir = '\\pusehf0r\hfb_mcl\grp\HFB_Mcl\\'
-	write_dir = 'K:\MCL_BACKUP\Bond Quality'
-	read_file = open(read_dir, 'r')
-	write_file = open(write_dir, 'w+')
+def main(): 
+	print('Transfer initiating...')
 
+	wl_src = 'T:\\Music\\13. Track13.wav'
+	wl_dest = 'c:\\Users\\sfelc\\Desktop\\Track 13 BACKUP.wav'
 
+	copy_file(wl_src, wl_dest)
+		
+	print('Done!')
 
 	
 
 
-	read_dir.close()
-	write_dir.close()
-	read_file.close()
-	write_file.close()
+	# break
 
+if __name__ == "__main__":
+	main()
 
-	break
