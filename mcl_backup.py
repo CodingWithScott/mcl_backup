@@ -13,39 +13,66 @@
 #
 # TODO: Handle file not found exception
 #       Show information and/or animation during transfer
+#       Eject USB dick -- is this possible from Python? 
+#		       			w/o admin access? maybe bad idea.
 
-# perform file transfer
-# close files
-# eject USB dick -- is this possible from Python? 
-#					w/o admin access? maybe bad idea.
 
-import shutil
+# Hardcoded file paths that are super ugly
+bond_log_src = 'Z:\\Hfb\\MCL LAB HFB\\Bond Log Sheets'
+bond_quality_src = 'Z:\\Hfb\\MCL LAB HFB\\HFB_Bond_Quality'
+wl_src = 'Z:\\Hfb\\MCL LAB HFB\\MCL Working List 2016 - Active.xlsx'
+
+bond_log_dest = 'G:\\MCL Back-up\\Bond LOG Sheets'
+bond_quality_dest = 'G:\\MCL Back-up\HFB_Bond_Quality'
+wl_dest = 'G:\\MCL Back-up\\Working list\\'
+
+import errno 	# Exception handling
+import shutil	# File handling module
 
 def copy_file(src, dest):
-    try:
-        shutil.copy(src, dest)
-    # eg. src and dest are the same file
-    except shutil.Error as e:
-        print('Error: %s' % e)
-    # eg. source or destination doesn't exist
-    except IOError as e:
-        print('Error: %s' % e.strerror)
+	try:
+		shutil.copy(src, dest)
+	# eg. src and dest are the same file
+	except shutil.Error as e:
+		print('Error: %s' % e)
+	# eg. source or destination doesn't exist
+	except IOError as e:
+		print('Error: %s' % e.strerror)
+
+def copy_anything(src, dst):
+	try:
+		shutil.copytree(src, dst)
+	except OSError as exc: # python >2.5
+		if exc.errno == errno.ENOTDIR:
+			shutil.copy(src, dst)
+		else: raise
+
+# Receives path to file OR folder of files
+def create_temp(dest):
+	shutil.mov(dest, dest + '.TMP')
+	print('Marked temp:\t%s')
+
+def clear_temp():
+	# https://automatetheboringstuff.com/chapter9/
+	for filename in os.listdir():
+		if filename.endswith('.TMP'):
+			#os.unlink(filename)
+			print('Deleted (air quotes):\t%s', filename)
+
 
 def main(): 
 	print('Transfer initiating...')
+	# TODO: Day of week logic
+	src_paths = [bond_log_src, bond_quality_src, wl_src]
+	dest_paths = [bond_log_dest, bond_quality_dest, wl_dest]
 
-	wl_src = 'T:\\Music\\13. Track13.wav'
-	wl_dest = 'c:\\Users\\sfelc\\Desktop\\Track 13 BACKUP.wav'
-
-	copy_file(wl_src, wl_dest)
-		
+	for curr_path in range(2):
+		create_temp(curr_path) ## STILL BROKEN
+		copy_anything(src_paths[curr_path], dest_paths[curr_path])
+		clear_temp()		
+	
 	print('Done!')
 
-	
-
-
-	# break
 
 if __name__ == "__main__":
 	main()
-

@@ -1,2 +1,2 @@
-py hello.py
+py mcl_backup.py
 PAUSE
