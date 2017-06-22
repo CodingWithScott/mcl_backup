@@ -11,17 +11,15 @@
 #       network, that will disrupt this script. File paths
 #       are hard coded.
 #
-# TODO: Handle file not found exception
-#       Show information and/or animation during transfer
-#       Eject USB dick -- is this possible from Python?
-#                       w/o admin access? maybe bad idea.
+# TODO: Show information and/or animation during transfer
+#       Make it so fault-tolerant that Camila could use it
 
 import errno    # Exception handling
 import os       # File handling
 import shutil   # File handling module
 
 
-# Hardcoded file paths that are super ugly
+# Hardcoded file paths
 bond_log_src = 'Z:\\Hfb\\MCL LAB HFB\\Bond Log Sheets'
 bond_quality_src = 'Z:\\Hfb\\MCL LAB HFB\\HFB_Bond_Quality'
 wl_src = 'Z:\\Hfb\\MCL LAB HFB\\MCL Working List 2016 - Active.xlsx'
@@ -31,6 +29,7 @@ bond_quality_dest = 'G:\\MCL Back-up\HFB_Bond_Quality'
 wl_dest = 'G:\\MCL Back-up\\Working list\\'
 
 
+# Totally depcrecated?
 def copy_file(src, dest):
     try:
         shutil.copy(src, dest)
@@ -42,6 +41,7 @@ def copy_file(src, dest):
         print('Error: %s' % e.strerror)
 
 
+# Could just be copy() probably
 def copy_anything(src, dest):
     try:
         shutil.copytree(src, dest)
