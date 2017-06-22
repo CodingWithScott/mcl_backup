@@ -56,15 +56,24 @@ def copy_anything(src, dest):
 def create_temp(path):
     path_is_file = False if (path[-1] == '\\') else True
 
+    # Verify valid path
+    if not (os.path.exists(path)):
+        print('Error: path \'%s\' not found!', path)
+        return
+
     if (path_is_file):
-        shutil.mov(path, path + '.TMP')
-        print('Marked temp:\t%s')
+        os.rename(path, path + '.TMP')
+        print('Marked temp:\t%s', path)
     else:
         files = os.listdir(path)
+        print('files:')
+        print(files)
         for file in files:
-            os.rename(os.path.join(path, file), os.path.join(path, '.TMP'))
+            os.rename(os.path.join(path, file),
+                      os.path.join(path, file + '.TMP'))
 
 
+# TODO: need to get this to accept a path, not default working directory
 def clear_temp():
     # https://automatetheboringstuff.com/chapter9/
     for filename in os.listdir():
