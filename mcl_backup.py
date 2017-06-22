@@ -82,6 +82,11 @@ def clear_temp():
             print('Deleted (air quotes):\t%s', filename)
 
 
+# TODO: Implement this
+def verify_data():
+    print('Data looks good! (jk, didn\'t check yet')
+
+
 def main():
     print('Transfer initiating...')
     # TODO: Day of week logic
@@ -89,8 +94,9 @@ def main():
     dest_paths = [bond_log_dest, bond_quality_dest, wl_dest]
 
     for curr_path in range(2):
-        create_temp(curr_path)  # STILL BROKEN
+        create_temp(curr_path)
         copy(src_paths[curr_path], dest_paths[curr_path])
+        verify_data()
         clear_temp()
 
     print('Done!')
