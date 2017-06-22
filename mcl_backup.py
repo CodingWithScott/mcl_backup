@@ -30,19 +30,19 @@ wl_dest = 'G:\\MCL Back-up\\Working list\\'
 
 
 # Totally depcrecated?
-def copy_file(src, dest):
-    try:
-        shutil.copy(src, dest)
-    # eg. src and dest are the same file
-    except shutil.Error as e:
-        print('Error: %s' % e)
-    # eg. source or destination doesn't exist
-    except IOError as e:
-        print('Error: %s' % e.strerror)
+# def copy_file(src, dest):
+#     try:
+#         shutil.copy(src, dest)
+#     # eg. src and dest are the same file
+#     except shutil.Error as e:
+#         print('Error: %s' % e)
+#     # eg. source or destination doesn't exist
+#     except IOError as e:
+#         print('Error: %s' % e.strerror)
 
 
-# Could just be copy() probably
-def copy_anything(src, dest):
+# Copy folder OR file
+def copy(src, dest):
     try:
         shutil.copytree(src, dest)
     except OSError as exc:  # python >2.5
@@ -90,7 +90,7 @@ def main():
 
     for curr_path in range(2):
         create_temp(curr_path)  # STILL BROKEN
-        copy_anything(src_paths[curr_path], dest_paths[curr_path])
+        copy(src_paths[curr_path], dest_paths[curr_path])
         clear_temp()
 
     print('Done!')
