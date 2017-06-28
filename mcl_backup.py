@@ -87,6 +87,21 @@ def verify_data():
     print('Data looks good! (jk, didn\'t check yet')
 
 
+# TODO: Implement this
+def progress_bar():
+    print('[            0%           ]')
+    print('[==         10%           ]')
+    print('[====       20%           ]')
+    print('[======     30%           ]')
+    print('[========   40%           ]')
+    print('[========== 50%           ]')
+    print('[========== 60% ==        ]')
+    print('[========== 70% ====      ]')
+    print('[========== 80% ======    ]')
+    print('[========== 90% ========  ]')
+    print('[========= 100% ==========]')
+
+
 def main():
     print('Transfer initiating...')
     # TODO: Day of week logic
