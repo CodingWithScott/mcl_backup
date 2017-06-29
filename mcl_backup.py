@@ -73,13 +73,14 @@ def create_temp(path):
                       os.path.join(path, file + '.TMP'))
 
 
-# TODO: need to get this to accept a path, not default working directory
-def clear_temp():
+def clear_temp(path):
+    print('cwd:\t', os.getcwd())
     # https://automatetheboringstuff.com/chapter9/
-    for filename in os.listdir():
+    for filename in os.listdir(path):
         if filename.endswith('.TMP'):
-            # os.unlink(filename)
-            print('Deleted (air quotes):\t%s', filename)
+            full_path = path + filename
+            os.unlink(full_path)
+            print('Deleted:\t', full_path)
 
 
 # TODO: Implement this

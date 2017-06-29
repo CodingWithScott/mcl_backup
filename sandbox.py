@@ -26,12 +26,16 @@ def create_temp(path):
         print('Marked temp:\t%s', path)
     else:
         files = os.listdir(path)
-        print('files:')
+        print('files (before):')
         print(files)
         for file in files:
             # copy_file(file, file + '.TMP)')
             os.rename(os.path.join(path, file),
                       os.path.join(path, file + '.TMP'))
+
+    files = os.listdir(path)
+    print('files (after):')
+    print(files)
 
 
 def uncreate_temp(path):
@@ -48,22 +52,26 @@ def uncreate_temp(path):
         print('Marked temp:\t%s', path)
     else:
         files = os.listdir(path)
-        print('files:')
+        print('files (before):')
         print(files)
         for file in files:
             # copy_file(file, file[:-4])
             os.rename(os.path.join(path, file),
                       os.path.join(path, file[:-4]))
 
+    files = os.listdir(path)
+    print('files (after):')
+    print(files)
 
-# TODO: need to get this to accept a path, not default working directory
+
 def clear_temp(path):
-    print('cwd:\t%s', os.currdir())
+    print('cwd:\t', os.getcwd())
     # https://automatetheboringstuff.com/chapter9/
     for filename in os.listdir(path):
         if filename.endswith('.TMP'):
-            # os.unlink(filename)
-            print('Deleted (air quotes):\t%s', filename)
+            full_path = path + filename
+            os.unlink(full_path)
+            print('Deleted:\t', full_path)
 
 
 def main():
@@ -71,8 +79,8 @@ def main():
     # path = 'C:\\Users\\sfelc\\Desktop\\monkey.jpg'
 
     # create_temp(path)
-    uncreate_temp(path)
-    # clear_temp(path)
+    # uncreate_temp(path)
+    clear_temp(path)
 
 
 if __name__ == "__main__":
