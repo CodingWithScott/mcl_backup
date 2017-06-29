@@ -15,6 +15,7 @@
 #       Make it so fault-tolerant that Camila could use it
 
 import errno    # Exception handling
+import hashlib  # SHA1 / MD5 hashing
 import os       # File handling
 import shutil   # File handling module
 
@@ -86,6 +87,26 @@ def clear_temp(path):
 # TODO: Implement this
 def verify_data():
     print('Data looks good! (jk, didn\'t check yet')
+
+    # SHA1 implementation
+    BLOCKSIZE = 65536
+    hasher = hashlib.sha1()
+    with open('anotherfile.txt', 'rb') as afile:
+        buf = afile.read(BLOCKSIZE)
+        while len(buf) > 0:
+            hasher.update(buf)
+            buf = afile.read(BLOCKSIZE)
+    print(hasher.hexdigest())
+
+    # MD5 implementation
+    BLOCKSIZE = 65536
+    hasher = hashlib.md5()
+    with open('anotherfile.txt', 'rb') as afile:
+        buf = afile.read(BLOCKSIZE)
+        while len(buf) > 0:
+            hasher.update(buf)
+            buf = afile.read(BLOCKSIZE)
+    print(hasher.hexdigest())
 
 
 # TODO: Implement this
