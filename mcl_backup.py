@@ -132,7 +132,7 @@ def main():
 
     print('Transfer initiating...')
     for curr_path in range(2):
-        create_temp(curr_path)
+        create_temp(dest_paths[curr_path])
         copy(src_paths[curr_path], dest_paths[curr_path])
         verify_data()
         clear_temp()
