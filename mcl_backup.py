@@ -14,6 +14,7 @@
 # TODO: Show information and/or animation during transfer
 #       Make it so fault-tolerant that Camila could use it
 
+import datetime # Day of week checking
 import errno    # Exception handling
 import hashlib  # SHA1 / MD5 hashing
 import os       # File handling
@@ -28,19 +29,6 @@ wl_src = 'Z:\\Hfb\\MCL LAB HFB\\MCL Working List 2016 - Active.xlsx'
 bond_log_dest = 'G:\\MCL Back-up\\Bond LOG Sheets'
 bond_quality_dest = 'G:\\MCL Back-up\HFB_Bond_Quality'
 wl_dest = 'G:\\MCL Back-up\\Working list\\'
-
-
-# Totally depcrecated?
-# def copy_file(src, dest):
-#     try:
-#         shutil.copy(src, dest)
-#     # eg. src and dest are the same file
-#     except shutil.Error as e:
-#         print('Error: %s' % e)
-#     # eg. source or destination doesn't exist
-#     except IOError as e:
-#         print('Error: %s' % e.strerror)
-
 
 # Copy folder OR file
 def copy(src, dest):
@@ -125,11 +113,24 @@ def progress_bar():
 
 
 def main():
-    print('Transfer initiating...')
-    # TODO: Day of week logic
+    if (datetime.datetime.today().weekday() == 0):
+        wl_dest = wl_dest + '1 Monday\\MCL Working List 2016 - Active.xlsx'
+    elif (datetime.datetime.today().weekday() == 1):
+        wl_dest = wl_dest + '2 Tuesday\\MCL Working List 2016 - Active.xlsx'
+    elif (datetime.datetime.today().weekday() == 2):
+        wl_dest = wl_dest + '3 Wednesday\\MCL Working List 2016 - Active.xlsx'
+    elif (datetime.datetime.today().weekday() == 3):
+        wl_dest = wl_dest + '4 Thursday\\MCL Working List 2016 - Active.xlsx'
+    elif (datetime.datetime.today().weekday() == 4):
+        wl_dest = wl_dest + '5 Friday\\MCL Working List 2016 - Active.xlsx'
+    else:
+        wl_dest = wl_dest + '6 Weekend\\MCL Working List 2016 - Active.xlsx'
+
     src_paths = [bond_log_src, bond_quality_src, wl_src]
     dest_paths = [bond_log_dest, bond_quality_dest, wl_dest]
 
+
+    print('Transfer initiating...')
     for curr_path in range(2):
         create_temp(curr_path)
         copy(src_paths[curr_path], dest_paths[curr_path])
