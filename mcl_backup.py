@@ -28,7 +28,7 @@ BOND_QUAL_SRC = 'Z:\\Hfb\\MCL LAB HFB\\HFB_Bond_Quality'
 WL_SRC = 'Z:\\Hfb\\MCL LAB HFB\\MCL Working List 2016 - Active.xlsx'
 
 BOND_LOG_DEST = 'G:\\MCL Back-up\\Bond LOG Sheets'
-BOND_QUAL_DEST = 'G:\\MCL Back-up\HFB_Bond_Quality'
+BOND_QUAL_DEST = 'G:\\MCL Back-up\\HFB_Bond_Quality'
 WL_DEST = 'G:\\MCL Back-up\\Working list\\'
 
 
@@ -43,7 +43,8 @@ def copy(src, dest):
             raise
 
 
-# Receives path to file OR folder of files
+# Backup thumbdrive before transferring from network.
+# Receives path to file OR folder of files.
 def create_temp(path):
     path_is_file = False if (path[-1] == '\\') else True
 
@@ -64,7 +65,7 @@ def create_temp(path):
                       os.path.join(path, file + '.TMP'))
 
 
-def clear_temp(path):
+def del_temp(path):
     print('cwd:\t', os.getcwd())
     # https://automatetheboringstuff.com/chapter9/
     for filename in os.listdir(path):
@@ -135,6 +136,33 @@ def progress_bar():
     print('[========= [OK] ==========]')
 
 
+# Restore thumbdrive to original state if file transfer fails.
+def uncreate_temp(path):
+    path_is_file = False if (path[-1] == '\\') else True
+
+    # Verify valid path
+    if not (os.path.exists(path)):
+        print('Error: path \'%s\' not found!', path)
+        return
+
+    # Trim .TMP off of filenames
+    if (path_is_file):
+        os.rename(path, path[:-4])
+        print('Marked temp:\t%s', path)
+    else:
+        files = os.listdir(path)
+        print('files (before):')
+        print(files)
+        for file in files:
+            # copy_file(file, file[:-4])
+            os.rename(os.path.join(path, file),
+                      os.path.join(path, file[:-4]))
+
+    files = os.listdir(path)
+    print('files (after):')
+    print(files)
+
+
 def main():
     wl_dest = WL_DEST
 
@@ -159,9 +187,12 @@ def main():
         create_temp(dest_paths[curr_path])
         copy(src_paths[curr_path], dest_paths[curr_path])
         if (verify_data(src_paths[curr_path], dest_paths[curr_path])):
-            clear_temp(dest_paths[curr_path])
+            del_temp(dest_paths[curr_path])
+            print('\n%s transferred successfully.' % dest_paths[curr_path])
         else:
-            print('\nFiles transferred successfully.')
+            print('\n%s transferred failed!' % dest_paths[curr_path])
+            print('Transfer aborted, thumb drive files unchanged.')
+            uncreate_temp(dest_paths[curr_path])
 
     os.system('pause')  # 'press any key to continue'
 
