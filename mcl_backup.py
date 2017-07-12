@@ -14,21 +14,23 @@
 # TODO: Show information and/or animation during transfer
 #       Make it so fault-tolerant that Camila could use it
 
-import datetime # Day of week checking
-import errno    # Exception handling
-import hashlib  # SHA1 / MD5 hashing
-import os       # File handling
-import shutil   # File handling module
+
+import datetime  # Day of week checking
+import errno     # Exception handling
+import hashlib   # SHA1 / MD5 hashing
+import os        # File handling
+import shutil    # File handling module
 
 
 # Hardcoded file paths
-bond_log_src = 'Z:\\Hfb\\MCL LAB HFB\\Bond Log Sheets'
-bond_quality_src = 'Z:\\Hfb\\MCL LAB HFB\\HFB_Bond_Quality'
-wl_src = 'Z:\\Hfb\\MCL LAB HFB\\MCL Working List 2016 - Active.xlsx'
+BOND_LOG_SRC = 'Z:\\Hfb\\MCL LAB HFB\\Bond Log Sheets'
+BOND_QUAL_SRC = 'Z:\\Hfb\\MCL LAB HFB\\HFB_Bond_Quality'
+WL_SRC = 'Z:\\Hfb\\MCL LAB HFB\\MCL Working List 2016 - Active.xlsx'
 
-bond_log_dest = 'G:\\MCL Back-up\\Bond LOG Sheets'
-bond_quality_dest = 'G:\\MCL Back-up\HFB_Bond_Quality'
-wl_dest = 'G:\\MCL Back-up\\Working list\\'
+BOND_LOG_DEST = 'G:\\MCL Back-up\\Bond LOG Sheets'
+BOND_QUAL_DEST = 'G:\\MCL Back-up\HFB_Bond_Quality'
+WL_DEST = 'G:\\MCL Back-up\\Working list\\'
+
 
 # Copy folder OR file
 def copy(src, dest):
@@ -72,29 +74,49 @@ def clear_temp(path):
             print('Deleted:\t', full_path)
 
 
-# TODO: Implement this
-def verify_data():
-    print('Data looks good! (jk, didn\'t check yet')
+def verify_data(src, dest):
+    src_md5_hasher = hashlib.md5()
+    src_sha1_hasher = hashlib.sha1()
 
-    # SHA1 implementation
-    BLOCKSIZE = 65536
-    hasher = hashlib.sha1()
-    with open('anotherfile.txt', 'rb') as afile:
-        buf = afile.read(BLOCKSIZE)
-        while len(buf) > 0:
-            hasher.update(buf)
-            buf = afile.read(BLOCKSIZE)
-    print(hasher.hexdigest())
+    dest_md5_hasher = hashlib.md5()
+    dest_sha1_hasher = hashlib.sha1()
 
-    # MD5 implementation
-    BLOCKSIZE = 65536
-    hasher = hashlib.md5()
-    with open('anotherfile.txt', 'rb') as afile:
-        buf = afile.read(BLOCKSIZE)
-        while len(buf) > 0:
-            hasher.update(buf)
-            buf = afile.read(BLOCKSIZE)
-    print(hasher.hexdigest())
+    with open(src, 'rb') as md5_file:
+        buf = md5_file.read()
+        src_md5_hasher.update(buf)
+
+    with open(src, 'rb') as sha1_file:
+        buf = sha1_file.read()
+        src_sha1_hasher.update(buf)
+
+    with open(dest, 'rb') as md5_file:
+        buf = md5_file.read()
+        dest_md5_hasher.update(buf)
+
+    with open(dest, 'rb') as sha1_file:
+        buf = sha1_file.read()
+        dest_sha1_hasher.update(buf)
+
+    print(src, ' integrity check...')
+    print('md5:\t', src_md5_hasher.hexdigest())
+    print('sha1:\t', src_sha1_hasher.hexdigest())
+
+    print(dest, ' integrity check...')
+    print('md5:\t', dest_md5_hasher.hexdigest())
+    print('sha1:\t', dest_sha1_hasher.hexdigest())
+
+    if (src_md5_hasher.hexdigest() == dest_md5_hasher.hexdigest()):
+        print('MD5 check:\tok!')
+    else:
+        print('MD5 check:\tfailed!')
+        return False
+    if (src_sha1_hasher.hexdigest() == dest_sha1_hasher.hexdigest()):
+        print('SHA1 check:\tok!')
+    else:
+        print('SHA1 check:\tfailed!')
+        return False
+
+    return True
 
 
 # TODO: Implement this
@@ -110,9 +132,12 @@ def progress_bar():
     print('[========== 80% ======    ]')
     print('[========== 90% ========  ]')
     print('[========= 100% ==========]')
+    print('[========= [OK] ==========]')
 
 
 def main():
+    wl_dest = WL_DEST
+
     if (datetime.datetime.today().weekday() == 0):
         wl_dest = wl_dest + '1 Monday\\MCL Working List 2016 - Active.xlsx'
     elif (datetime.datetime.today().weekday() == 1):
@@ -126,18 +151,19 @@ def main():
     else:
         wl_dest = wl_dest + '6 Weekend\\MCL Working List 2016 - Active.xlsx'
 
-    src_paths = [bond_log_src, bond_quality_src, wl_src]
-    dest_paths = [bond_log_dest, bond_quality_dest, wl_dest]
-
+    src_paths = [BOND_LOG_SRC, BOND_QUAL_SRC, WL_SRC]
+    dest_paths = [BOND_LOG_DEST, BOND_QUAL_DEST, WL_DEST]
 
     print('Transfer initiating...')
     for curr_path in range(2):
         create_temp(dest_paths[curr_path])
         copy(src_paths[curr_path], dest_paths[curr_path])
-        verify_data()
-        clear_temp()
+        if (verify_data(src_paths[curr_path], dest_paths[curr_path])):
+            clear_temp(dest_paths[curr_path])
+        else:
+            print('\nFiles transferred successfully.')
 
-    print('Done!')
+    os.system('pause')  # 'press any key to continue'
 
 
 if __name__ == "__main__":
