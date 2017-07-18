@@ -1,0 +1,8 @@
+# Hardcoded file paths
+BOND_LOG_SRC = 'Z:\\Hfb\\MCL LAB HFB\\Bond Log Sheets'
+BOND_QUAL_SRC = 'Z:\\Hfb\\MCL LAB HFB\\HFB_Bond_Quality'
+WL_SRC = 'Z:\\Hfb\\MCL LAB HFB\\MCL Working List 2016 - Active.xlsx'
+
+BOND_LOG_DEST = 'G:\\MCL Back-up\\Bond LOG Sheets'
+BOND_QUAL_DEST = 'G:\\MCL Back-up\\HFB_Bond_Quality'
+WL_DEST = 'G:\\MCL Back-up\\Working list\\'

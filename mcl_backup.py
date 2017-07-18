@@ -23,13 +23,13 @@ import shutil    # File handling module
 
 
 # Hardcoded file paths
-BOND_LOG_SRC = 'Z:\\Hfb\\MCL LAB HFB\\Bond Log Sheets'
-BOND_QUAL_SRC = 'Z:\\Hfb\\MCL LAB HFB\\HFB_Bond_Quality'
-WL_SRC = 'Z:\\Hfb\\MCL LAB HFB\\MCL Working List 2016 - Active.xlsx'
+BOND_LOG_SRC = 'G:\\Hfb\\MCL LAB HFB\\Bond Log Sheets'
+BOND_QUAL_SRC = 'G:\\Hfb\\MCL LAB HFB\\HFB_Bond_Quality'
+WL_SRC = 'G:\\Hfb\\MCL LAB HFB\\MCL Working List 2016 - Active.xlsx'
 
-BOND_LOG_DEST = 'G:\\MCL Back-up\\Bond LOG Sheets'
-BOND_QUAL_DEST = 'G:\\MCL Back-up\\HFB_Bond_Quality'
-WL_DEST = 'G:\\MCL Back-up\\Working list\\'
+BOND_LOG_DEST = 'Z:\\MCL Back-up\\Bond LOG Sheets'
+BOND_QUAL_DEST = 'Z:\\MCL Back-up\\HFB_Bond_Quality'
+WL_DEST = 'Z:\\MCL Back-up\\Working list\\'
 
 
 # Copy folder OR file
@@ -50,7 +50,7 @@ def create_temp(path):
 
     # Verify valid path
     if not (os.path.exists(path)):
-        print('Error: path \'%s\' not found!', path)
+        print(' \'%s\' not found on thumbdrive, no temp file created.', path)
         return
 
     if (path_is_file):
