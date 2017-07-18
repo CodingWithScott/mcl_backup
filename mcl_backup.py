@@ -23,12 +23,12 @@ import shutil    # File handling module
 
 
 # Hardcoded file paths
-BOND_LOG_SRC = 'G:\\Hfb\\MCL LAB HFB\\Bond Log Sheets'
-BOND_QUAL_SRC = 'G:\\Hfb\\MCL LAB HFB\\HFB_Bond_Quality'
+BOND_LOG_SRC = 'G:\\Hfb\\MCL LAB HFB\\Bond Log Sheets\\'
+BOND_QUAL_SRC = 'G:\\Hfb\\MCL LAB HFB\\HFB_Bond_Quality\\'
 WL_SRC = 'G:\\Hfb\\MCL LAB HFB\\MCL Working List 2016 - Active.xlsx'
 
-BOND_LOG_DEST = 'Z:\\MCL Back-up\\Bond LOG Sheets'
-BOND_QUAL_DEST = 'Z:\\MCL Back-up\\HFB_Bond_Quality'
+BOND_LOG_DEST = 'Z:\\MCL Back-up\\Bond LOG Sheets\\'
+BOND_QUAL_DEST = 'Z:\\MCL Back-up\\HFB_Bond_Quality\\'
 WL_DEST = 'Z:\\MCL Back-up\\Working list\\'
 
 
@@ -55,7 +55,7 @@ def create_temp(path):
 
     if (path_is_file):
         os.rename(path, path + '.TMP')
-        print('Marked temp:\t%s', path)
+        print('Marked temp:\t', path)
     else:
         files = os.listdir(path)
         print('files:')
