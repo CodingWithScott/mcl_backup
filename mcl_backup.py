@@ -16,7 +16,6 @@
 
 
 import datetime  # Day of week checking
-import errno     # Exception handling
 import hashlib   # SHA1 / MD5 hashing
 import os        # File handling
 import shutil    # File handling module
@@ -32,16 +31,17 @@ BOND_QUAL_DEST = 'Z:\\MCL Back-up\\HFB_Bond_Quality\\'
 WL_DEST = 'Z:\\MCL Back-up\\Working list\\'
 
 
-# Copy folder OR file
+# Copy folder (Does it support file?)
 def copy(src, dest):
     print('copy(\'{0}\' , \'{1}\')\n'.format(src, dest))
-    try:
-        shutil.copytree(src, dest)
-    except OSError as exc:  # python >2.5
-        if exc.errno == errno.ENOTDIR:
-            shutil.copy(src, dest)
-        else:
-            raise
+
+    src_files = os.listdir(src)
+
+    for src_file_name in src_files:
+        src_full_path = os.path.join(src, src_file_name)
+        dest_full_path = os.path.join(dest, src_file_name)
+        if (os.path.isfile(src_full_path)):
+            shutil.copy(src_full_path, dest_full_path)
 
 
 # Backup thumbdrive before transferring from network.
@@ -51,7 +51,7 @@ def create_temp(path):
 
     # Verify valid path
     if not (os.path.exists(path)):
-        print(' \'%s\' not found on thumbdrive, no temp file created.', path)
+        print(' \'{}\' not found, no temp file created.'.format(path))
         return
 
     if (path_is_file):
@@ -65,10 +65,10 @@ def create_temp(path):
         for file in files:
             os.rename(os.path.join(path, file),
                       os.path.join(path, file + '.TMP'))
+        files = os.listdir(path)
         print('files after appending TMP:')
         print(files)
         print('\n')
-
 
 
 def del_temp(path):
@@ -164,7 +164,7 @@ def uncreate_temp(path):
 
             while(trim_file[-4:] == '.TMP'):
                 os.rename(os.path.join(path, trim_file),
-                      os.path.join(path, trim_file[:-4]))
+                          os.path.join(path, trim_file[:-4]))
                 trim_file = trim_file[:-4]
 
 
@@ -189,7 +189,7 @@ def main():
     dest_paths = [BOND_LOG_DEST, BOND_QUAL_DEST, wl_dest]
 
     print('Transfer initiating...')
-    for curr_path in range(2):
+    for curr_path in range(3):
         create_temp(dest_paths[curr_path])
         copy(src_paths[curr_path], dest_paths[curr_path])
         if (verify_data(src_paths[curr_path], dest_paths[curr_path])):
