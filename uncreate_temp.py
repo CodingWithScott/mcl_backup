@@ -12,7 +12,7 @@ def uncreate_temp(path):
 
     # Verify valid path
     if not (os.path.exists(path)):
-        print('Error: path \'%s\' not found!', path)
+        print('Error: path \'{}\' not found!'.format(path))
         return
 
     # Trim .TMP off of filenames
@@ -23,23 +23,13 @@ def uncreate_temp(path):
     else:
         # path == directory, file == file w/in directory
         files = os.listdir(path)
-        print('files (before unmarking):')
-        print(files)
         for orig_file in files:
-            print('orig_file:\t{}'.format(orig_file))
-
             trim_file = orig_file
-            print('trim_file:\t{}'.format(trim_file))
 
             while(trim_file[-4:] == '.TMP'):
                 os.rename(os.path.join(path, trim_file),
                       os.path.join(path, trim_file[:-4]))
                 trim_file = trim_file[:-4]
-
-    files = os.listdir(path)
-    print('files (after unmarking):')
-    print(files)
-    print('\n')
 
 def main():
     wl_dest = WL_DEST
