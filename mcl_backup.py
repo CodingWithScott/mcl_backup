@@ -34,6 +34,7 @@ WL_DEST = 'Z:\\MCL Back-up\\Working list\\'
 
 # Copy folder OR file
 def copy(src, dest):
+    print('copy(\'{0}\' , \'{1}\')\n'.format(src, dest))
     try:
         shutil.copytree(src, dest)
     except OSError as exc:  # python >2.5
@@ -58,11 +59,16 @@ def create_temp(path):
         print('Marked temp:\t', path)
     else:
         files = os.listdir(path)
-        print('files:')
+        print('files before appending TMP:')
         print(files)
+        print('\n')
         for file in files:
             os.rename(os.path.join(path, file),
                       os.path.join(path, file + '.TMP'))
+        print('files after appending TMP:')
+        print(files)
+        print('\n')
+
 
 
 def del_temp(path):
@@ -164,6 +170,7 @@ def uncreate_temp(path):
 
 
 def main():
+    # Create mutable string from constant
     wl_dest = WL_DEST
 
     if (datetime.datetime.today().weekday() == 0):
@@ -180,7 +187,7 @@ def main():
         wl_dest = wl_dest + '6 Weekend\\MCL Working List 2016 - Active.xlsx'
 
     src_paths = [BOND_LOG_SRC, BOND_QUAL_SRC, WL_SRC]
-    dest_paths = [BOND_LOG_DEST, BOND_QUAL_DEST, WL_DEST]
+    dest_paths = [BOND_LOG_DEST, BOND_QUAL_DEST, wl_dest]
 
     print('Transfer initiating...')
     for curr_path in range(2):

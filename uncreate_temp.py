@@ -26,18 +26,15 @@ def uncreate_temp(path):
         print('files (before unmarking):')
         print(files)
         for orig_file in files:
-            # copy_file(file, file[:-4])
             print('orig_file:\t{}'.format(orig_file))
-            print('orig_file[:-4]:\t{}'.format(orig_file[-4:]))
 
-            trim_file = orig_file[:-4]
+            trim_file = orig_file
+            print('trim_file:\t{}'.format(trim_file))
 
             while(trim_file[-4:] == '.TMP'):
+                os.rename(os.path.join(path, trim_file),
+                      os.path.join(path, trim_file[:-4]))
                 trim_file = trim_file[:-4]
-                print('entered filename trim section')
-                # os.rename(path, path[:-4])
-                os.rename(os.path.join(path, orig_file),
-                      os.path.join(path, trim_file))
 
     files = os.listdir(path)
     print('files (after unmarking):')
@@ -65,7 +62,7 @@ def main():
 
     print('Reverting TMP...\n')
     for curr_path in range(2):
-        print('uncreate_temp(\'{0}\'):\n'.format(dest_paths[curr_path]))
+        print('uncreate_temp(\'{}\'):\n'.format(dest_paths[curr_path]))
         uncreate_temp(dest_paths[curr_path])
 
 if __name__ == "__main__":
