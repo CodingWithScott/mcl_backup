@@ -82,64 +82,96 @@ def del_temp(path):
 
 
 def verify_data(src, dest):
+    path_is_file = False if (path[-1] == '\\') else True
+
     src_md5_hasher = hashlib.md5()
     src_sha1_hasher = hashlib.sha1()
 
     dest_md5_hasher = hashlib.md5()
     dest_sha1_hasher = hashlib.sha1()
 
-    with open(src, 'rb') as md5_file:
-        buf = md5_file.read()
-        src_md5_hasher.update(buf)
+    if (path_is_file):
+        with open(src, 'rb') as md5_file:
+            buf = md5_file.read()
+            src_md5_hasher.update(buf)
 
-    with open(src, 'rb') as sha1_file:
-        buf = sha1_file.read()
-        src_sha1_hasher.update(buf)
+        with open(src, 'rb') as sha1_file:
+            buf = sha1_file.read()
+            src_sha1_hasher.update(buf)
 
-    with open(dest, 'rb') as md5_file:
-        buf = md5_file.read()
-        dest_md5_hasher.update(buf)
+        with open(dest, 'rb') as md5_file:
+            buf = md5_file.read()
+            dest_md5_hasher.update(buf)
 
-    with open(dest, 'rb') as sha1_file:
-        buf = sha1_file.read()
-        dest_sha1_hasher.update(buf)
+        with open(dest, 'rb') as sha1_file:
+            buf = sha1_file.read()
+            dest_sha1_hasher.update(buf)
 
-    print(src, ' integrity check...')
-    print('md5:\t', src_md5_hasher.hexdigest())
-    print('sha1:\t', src_sha1_hasher.hexdigest())
+        print(src, ' integrity check...')
+        print('md5:\t', src_md5_hasher.hexdigest())
+        print('sha1:\t', src_sha1_hasher.hexdigest())
 
-    print(dest, ' integrity check...')
-    print('md5:\t', dest_md5_hasher.hexdigest())
-    print('sha1:\t', dest_sha1_hasher.hexdigest())
+        print(dest, ' integrity check...')
+        print('md5:\t', dest_md5_hasher.hexdigest())
+        print('sha1:\t', dest_sha1_hasher.hexdigest())
 
-    if (src_md5_hasher.hexdigest() == dest_md5_hasher.hexdigest()):
-        print('MD5 check:\tok!')
+        if (src_md5_hasher.hexdigest() == dest_md5_hasher.hexdigest()):
+            print('MD5 check:\tok!')
+        else:
+            print('MD5 check:\tfailed!')
+            return False
+        if (src_sha1_hasher.hexdigest() == dest_sha1_hasher.hexdigest()):
+            print('SHA1 check:\tok!')
+        else:
+            print('SHA1 check:\tfailed!')
+            return False
     else:
-        print('MD5 check:\tfailed!')
-        return False
-    if (src_sha1_hasher.hexdigest() == dest_sha1_hasher.hexdigest()):
-        print('SHA1 check:\tok!')
-    else:
-        print('SHA1 check:\tfailed!')
-        return False
+        src_files = os.listdir(src)
+        dest_files = os.listdir(dest)
+
+        for curr_file in range(len(dest_files)):
+            src_md5_hasher = hashlib.md5()
+            src_sha1_hasher = hashlib.sha1()
+
+            dest_md5_hasher = hashlib.md5()
+            dest_sha1_hasher = hashlib.sha1()
+
+            with open(src_files[curr_file], 'rb') as md5_file:
+                buf = md5_file.read()
+                src_md5_hasher.update(buf)
+
+            with open(src_files[curr_file], 'rb') as sha1_file:
+                buf = sha1_file.read()
+                src_sha1_hasher.update(buf)
+
+            with open(dest_files[curr_file], 'rb') as md5_file:
+                buf = md5_file.read()
+                dest_md5_hasher.update(buf)
+
+            with open(dest_files[curr_file], 'rb') as sha1_file:
+                buf = sha1_file.read()
+                dest_sha1_hasher.update(buf)
+
+            print(src_files[curr_file], ' integrity check...')
+            print('md5:\t', src_md5_hasher.hexdigest())
+            print('sha1:\t', src_sha1_hasher.hexdigest())
+
+            print(dest_files[curr_file], ' integrity check...')
+            print('md5:\t', dest_md5_hasher.hexdigest())
+            print('sha1:\t', dest_sha1_hasher.hexdigest())
+
+            if (src_md5_hasher.hexdigest() == dest_md5_hasher.hexdigest()):
+                print('MD5 check:\tok!')
+            else:
+                print('MD5 check:\tfailed!')
+                return False
+            if (src_sha1_hasher.hexdigest() == dest_sha1_hasher.hexdigest()):
+                print('SHA1 check:\tok!')
+            else:
+                print('SHA1 check:\tfailed!')
+                return False
 
     return True
-
-
-# TODO: Implement this
-def progress_bar():
-    print('[            0%           ]')
-    print('[==         10%           ]')
-    print('[====       20%           ]')
-    print('[======     30%           ]')
-    print('[========   40%           ]')
-    print('[========== 50%           ]')
-    print('[========== 60% ==        ]')
-    print('[========== 70% ====      ]')
-    print('[========== 80% ======    ]')
-    print('[========== 90% ========  ]')
-    print('[========= 100% ==========]')
-    print('[========= [OK] ==========]')
 
 
 # Restore thumbdrive to original state if file transfer fails.
