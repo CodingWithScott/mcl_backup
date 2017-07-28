@@ -5,20 +5,16 @@
 #
 # Author: Scott Felch
 # Build date: 6/12/17
-# Last updated: 6/13/26
+# Last updated: 7/28/17
 #
 # Note: If the location or name of files changes on the
 #       network, that will disrupt this script. File paths
 #       are hard coded.
-#
-# TODO: Show information and/or animation during transfer
-#       Make it so fault-tolerant that Camila could use it
-
 
 import datetime  # Day of week checking
 import hashlib   # SHA1 / MD5 hashing
 import os        # File handling
-import shutil    # File handling module
+import shutil    # File copying
 
 
 # Hardcoded file paths
@@ -82,7 +78,7 @@ def del_temp(path):
 
 
 def verify_data(src, dest):
-    path_is_file = False if (path[-1] == '\\') else True
+    path_is_file = False if (src[-1] == '\\') else True
 
     src_md5_hasher = hashlib.md5()
     src_sha1_hasher = hashlib.sha1()
@@ -135,6 +131,8 @@ def verify_data(src, dest):
 
             dest_md5_hasher = hashlib.md5()
             dest_sha1_hasher = hashlib.sha1()
+
+            print('135:\t\'{}\''.format(src_files[curr_file]))
 
             with open(src_files[curr_file], 'rb') as md5_file:
                 buf = md5_file.read()

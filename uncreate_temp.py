@@ -19,7 +19,7 @@ def uncreate_temp(path):
     if (path_is_file):
         while(path[:-4] == '.TMP'):
             os.rename(path, path[:-4])
-        print('Unmarked temp:\t{0}', path)
+        print('Unmarked temp:\t{}', path)
     else:
         # path == directory, file == file w/in directory
         files = os.listdir(path)
@@ -28,8 +28,9 @@ def uncreate_temp(path):
 
             while(trim_file[-4:] == '.TMP'):
                 os.rename(os.path.join(path, trim_file),
-                      os.path.join(path, trim_file[:-4]))
+                          os.path.join(path, trim_file[:-4]))
                 trim_file = trim_file[:-4]
+
 
 def main():
     wl_dest = WL_DEST
@@ -47,13 +48,13 @@ def main():
     else:
         wl_dest = wl_dest + '6 Weekend\\MCL Working List 2016 - Active.xlsx'
 
-
     dest_paths = [BOND_LOG_DEST, BOND_QUAL_DEST, wl_dest]
 
     print('Reverting TMP...\n')
     for curr_path in range(2):
         print('uncreate_temp(\'{}\'):\n'.format(dest_paths[curr_path]))
         uncreate_temp(dest_paths[curr_path])
+
 
 if __name__ == "__main__":
     main()
