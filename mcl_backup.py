@@ -48,23 +48,34 @@ def copy(src, dest):
 
 # Backup thumbdrive before transferring from network.
 # Receives absolute path to file
-def create_temp(path):
+def create_temp(file_path):
     # Verify valid path
-    if not (os.path.exists(path)):
-        print(' \'{}\' not found, no temp file created.'.format(path))
+    if not (os.path.exists(file_path)):
+        print(' \'{}\' not found, no temp file created.'.format(file_path))
         return
 
-    os.rename(path, path + '.TMP')
-    print('Marked temp:\t', path)
+    os.rename(file_path, file_path + '.TMP')
+    print('Marked temp:\t', file_path)
 
 
-def del_temp(path):
-    print('Oopps del_temp() isn\'t written lol')
+def del_temp(file_path):
+    print('Entered del_temp():')
+    file_dir = file_path
+    while (file_dir[-1] != '\\'):
+        file_dir = file_dir[:len(file_dir) - 1]
 
-    
+    print('file_path:\t\'{}\'\nfile_dir:\t\'{}\''.format(file_path, file_dir))
 
+    rm_temp = file_path + '.TMP'
+    os.unlink(rm_temp)
+    print('Deleted:\t', rm_temp)
 
-
+    # # https://automatetheboringstuff.com/chapter9/
+    # for filename in os.listdir(file_dir):
+    #     if filename.endswith('.TMP'):
+    #         full_path = file_path + filename
+    #         print('full_path:\t\'{}\''.format(full_path))
+    #         os.unlink(full_path)
 
 
 def verify_data(src, dest):
