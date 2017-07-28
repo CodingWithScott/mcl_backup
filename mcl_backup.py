@@ -18,184 +18,113 @@ import shutil    # File copying
 
 
 # Hardcoded file paths
-BOND_LOG_SRC = 'G:\\Hfb\\MCL LAB HFB\\Bond Log Sheets\\'
-BOND_QUAL_SRC = 'G:\\Hfb\\MCL LAB HFB\\HFB_Bond_Quality\\'
-WL_SRC = 'G:\\Hfb\\MCL LAB HFB\\MCL Working List 2016 - Active.xlsx'
+BOND_LOG_SRC_1 = 'G:\\Hfb\\MCL LAB HFB\\Bond Log Sheets\\Bond log 1.xlsx'
+BOND_LOG_SRC_2 = 'G:\\Hfb\\MCL LAB HFB\\Bond Log Sheets\\Bond log 2.xlsx'
+BOND_LOG_SRC_3 = 'G:\\Hfb\\MCL LAB HFB\\Bond Log Sheets\\Bond log 3.xlsx'
 
-BOND_LOG_DEST = 'Z:\\MCL Back-up\\Bond LOG Sheets\\'
-BOND_QUAL_DEST = 'Z:\\MCL Back-up\\HFB_Bond_Quality\\'
+BOND_QUAL_SRC_1 = 'G:\\Hfb\\MCL LAB HFB\\HFB_Bond_Quality\\Bond quality 1.xlsx'
+BOND_QUAL_SRC_2 = 'G:\\Hfb\\MCL LAB HFB\\HFB_Bond_Quality\\Bond quality 2.xlsx'
+BOND_QUAL_SRC_3 = 'G:\\Hfb\\MCL LAB HFB\\HFB_Bond_Quality\\Bond quality 3.xlsx'
+
+BOND_LOG_DEST_1 = 'Z:\\MCL Back-up\\Bond LOG Sheets\\Bond log 1.xlsx'
+BOND_LOG_DEST_2 = 'Z:\\MCL Back-up\\Bond LOG Sheets\\Bond log 2.xlsx'
+BOND_LOG_DEST_3 = 'Z:\\MCL Back-up\\Bond LOG Sheets\\Bond log 3.xlsx'
+
+BOND_QUAL_DEST_1 = 'Z:\\MCL Back-up\\HFB_Bond_Quality\\Bond quality 1.xlsx'
+BOND_QUAL_DEST_2 = 'Z:\\MCL Back-up\\HFB_Bond_Quality\\Bond quality 2.xlsx'
+BOND_QUAL_DEST_3 = 'Z:\\MCL Back-up\\HFB_Bond_Quality\\Bond quality 3.xlsx'
+
+WL_SRC = 'G:\\Hfb\\MCL LAB HFB\\MCL Working List 2016 - Active.xlsx'
 WL_DEST = 'Z:\\MCL Back-up\\Working list\\'
 
 
-# Copy folder (Does it support file?)
+# Copy file from 'src' absolute path to 'dest' absolute path
 def copy(src, dest):
     print('copy(\'{0}\' , \'{1}\')\n'.format(src, dest))
 
-    src_files = os.listdir(src)
-
-    for src_file_name in src_files:
-        src_full_path = os.path.join(src, src_file_name)
-        dest_full_path = os.path.join(dest, src_file_name)
-        if (os.path.isfile(src_full_path)):
-            shutil.copy(src_full_path, dest_full_path)
+    if (os.path.isfile(src)):
+        shutil.copy(src, dest)
 
 
 # Backup thumbdrive before transferring from network.
-# Receives path to file OR folder of files.
+# Receives absolute path to file
 def create_temp(path):
-    path_is_file = False if (path[-1] == '\\') else True
-
     # Verify valid path
     if not (os.path.exists(path)):
         print(' \'{}\' not found, no temp file created.'.format(path))
         return
 
-    if (path_is_file):
-        os.rename(path, path + '.TMP')
-        print('Marked temp:\t', path)
-    else:
-        files = os.listdir(path)
-        print('files before appending TMP:')
-        print(files)
-        print('\n')
-        for file in files:
-            os.rename(os.path.join(path, file),
-                      os.path.join(path, file + '.TMP'))
-        files = os.listdir(path)
-        print('files after appending TMP:')
-        print(files)
-        print('\n')
+    os.rename(path, path + '.TMP')
+    print('Marked temp:\t', path)
 
 
 def del_temp(path):
-    print('cwd:\t', os.getcwd())
-    # https://automatetheboringstuff.com/chapter9/
-    for filename in os.listdir(path):
-        if filename.endswith('.TMP'):
-            full_path = path + filename
-            os.unlink(full_path)
-            print('Deleted:\t', full_path)
+    print('Oopps del_temp() isn\'t written lol')
+
+    
+
+
+
 
 
 def verify_data(src, dest):
-    path_is_file = False if (src[-1] == '\\') else True
-
     src_md5_hasher = hashlib.md5()
     src_sha1_hasher = hashlib.sha1()
 
     dest_md5_hasher = hashlib.md5()
     dest_sha1_hasher = hashlib.sha1()
 
-    if (path_is_file):
-        with open(src, 'rb') as md5_file:
-            buf = md5_file.read()
-            src_md5_hasher.update(buf)
+    with open(src, 'rb') as md5_file:
+        buf = md5_file.read()
+        src_md5_hasher.update(buf)
 
-        with open(src, 'rb') as sha1_file:
-            buf = sha1_file.read()
-            src_sha1_hasher.update(buf)
+    with open(src, 'rb') as sha1_file:
+        buf = sha1_file.read()
+        src_sha1_hasher.update(buf)
 
-        with open(dest, 'rb') as md5_file:
-            buf = md5_file.read()
-            dest_md5_hasher.update(buf)
+    with open(dest, 'rb') as md5_file:
+        buf = md5_file.read()
+        dest_md5_hasher.update(buf)
 
-        with open(dest, 'rb') as sha1_file:
-            buf = sha1_file.read()
-            dest_sha1_hasher.update(buf)
+    with open(dest, 'rb') as sha1_file:
+        buf = sha1_file.read()
+        dest_sha1_hasher.update(buf)
 
-        print(src, ' integrity check...')
-        print('md5:\t', src_md5_hasher.hexdigest())
-        print('sha1:\t', src_sha1_hasher.hexdigest())
+    print(src, ' integrity check...')
+    print('md5:\t', src_md5_hasher.hexdigest())
+    print('sha1:\t', src_sha1_hasher.hexdigest())
 
-        print(dest, ' integrity check...')
-        print('md5:\t', dest_md5_hasher.hexdigest())
-        print('sha1:\t', dest_sha1_hasher.hexdigest())
+    print(dest, ' integrity check...')
+    print('md5:\t', dest_md5_hasher.hexdigest())
+    print('sha1:\t', dest_sha1_hasher.hexdigest())
 
-        if (src_md5_hasher.hexdigest() == dest_md5_hasher.hexdigest()):
-            print('MD5 check:\tok!')
-        else:
-            print('MD5 check:\tfailed!')
-            return False
-        if (src_sha1_hasher.hexdigest() == dest_sha1_hasher.hexdigest()):
-            print('SHA1 check:\tok!')
-        else:
-            print('SHA1 check:\tfailed!')
-            return False
+    if (src_md5_hasher.hexdigest() == dest_md5_hasher.hexdigest()):
+        print('MD5 check:\tok!')
     else:
-        src_files = os.listdir(src)
-        dest_files = os.listdir(dest)
-
-        for curr_file in range(len(dest_files)):
-            src_md5_hasher = hashlib.md5()
-            src_sha1_hasher = hashlib.sha1()
-
-            dest_md5_hasher = hashlib.md5()
-            dest_sha1_hasher = hashlib.sha1()
-
-            print('135:\t\'{}\''.format(src_files[curr_file]))
-
-            with open(src_files[curr_file], 'rb') as md5_file:
-                buf = md5_file.read()
-                src_md5_hasher.update(buf)
-
-            with open(src_files[curr_file], 'rb') as sha1_file:
-                buf = sha1_file.read()
-                src_sha1_hasher.update(buf)
-
-            with open(dest_files[curr_file], 'rb') as md5_file:
-                buf = md5_file.read()
-                dest_md5_hasher.update(buf)
-
-            with open(dest_files[curr_file], 'rb') as sha1_file:
-                buf = sha1_file.read()
-                dest_sha1_hasher.update(buf)
-
-            print(src_files[curr_file], ' integrity check...')
-            print('md5:\t', src_md5_hasher.hexdigest())
-            print('sha1:\t', src_sha1_hasher.hexdigest())
-
-            print(dest_files[curr_file], ' integrity check...')
-            print('md5:\t', dest_md5_hasher.hexdigest())
-            print('sha1:\t', dest_sha1_hasher.hexdigest())
-
-            if (src_md5_hasher.hexdigest() == dest_md5_hasher.hexdigest()):
-                print('MD5 check:\tok!')
-            else:
-                print('MD5 check:\tfailed!')
-                return False
-            if (src_sha1_hasher.hexdigest() == dest_sha1_hasher.hexdigest()):
-                print('SHA1 check:\tok!')
-            else:
-                print('SHA1 check:\tfailed!')
-                return False
+        print('MD5 check:\tfailed!')
+        return False
+    if (src_sha1_hasher.hexdigest() == dest_sha1_hasher.hexdigest()):
+        print('SHA1 check:\tok!')
+    else:
+        print('SHA1 check:\tfailed!')
+        return False
 
     return True
 
 
-# Restore thumbdrive to original state if file transfer fails.
+# Restore thumbdrive to original state if file transfer fails, trimp .TMP off
+# of filenames.
 def uncreate_temp(path):
-    path_is_file = False if (path[-1] == '\\') else True
-
     # Verify valid path
     if not (os.path.exists(path)):
-        print('Error: path \'{}\' not found!'.format(path))
+        print('uncreate_temp() error: path \'{}\' not found!'.format(path))
         return
 
-    # Trim .TMP off of filenames
-    if (path_is_file):
-        while(path[:-4] == '.TMP'):
-            os.rename(path, path[:-4])
-        print('Unmarked temp:\t{0}', path)
-    else:
-        # path == directory, file == file w/in directory
-        files = os.listdir(path)
-        for orig_file in files:
-            trim_file = orig_file
-
-            while(trim_file[-4:] == '.TMP'):
-                os.rename(os.path.join(path, trim_file),
-                          os.path.join(path, trim_file[:-4]))
-                trim_file = trim_file[:-4]
+    trim_path = path
+    while(trim_path[:-4] == '.TMP'):
+        os.rename(trim_path, trim_path[:-4])
+        trim_path = trim_path[:-4]
+    print('Unmarked temp:\t{}'.format(path))
 
 
 def main():
@@ -215,20 +144,24 @@ def main():
     else:
         wl_dest = wl_dest + '6 Weekend\\MCL Working List 2016 - Active.xlsx'
 
-    src_paths = [BOND_LOG_SRC, BOND_QUAL_SRC, WL_SRC]
-    dest_paths = [BOND_LOG_DEST, BOND_QUAL_DEST, wl_dest]
+    src_files = [BOND_LOG_SRC_1, BOND_LOG_SRC_2, BOND_LOG_SRC_3,
+                 BOND_QUAL_SRC_1, BOND_QUAL_SRC_2, BOND_QUAL_SRC_3,
+                 WL_SRC]
+    dest_files = [BOND_LOG_DEST_1, BOND_LOG_DEST_2, BOND_LOG_DEST_3,
+                  BOND_QUAL_DEST_1, BOND_QUAL_DEST_2, BOND_QUAL_DEST_3,
+                  wl_dest]
 
     print('Transfer initiating...')
-    for curr_path in range(3):
-        create_temp(dest_paths[curr_path])
-        copy(src_paths[curr_path], dest_paths[curr_path])
-        if (verify_data(src_paths[curr_path], dest_paths[curr_path])):
-            del_temp(dest_paths[curr_path])
-            print('\n%s transferred successfully.' % dest_paths[curr_path])
+    for curr_file in range(len(src_files)):
+        create_temp(dest_files[curr_file])
+        copy(src_files[curr_file], dest_files[curr_file])
+        if (verify_data(src_files[curr_file], dest_files[curr_file])):
+            del_temp(dest_files[curr_file])
+            print('\n%s transferred successfully.' % dest_files[curr_file])
         else:
-            print('\n%s transferred failed!' % dest_paths[curr_path])
+            print('\n%s transferred failed!' % dest_files[curr_file])
             print('Transfer aborted, thumb drive files unchanged.')
-            uncreate_temp(dest_paths[curr_path])
+            uncreate_temp(dest_files[curr_file])
 
     os.system('pause')  # 'press any key to continue'
 
