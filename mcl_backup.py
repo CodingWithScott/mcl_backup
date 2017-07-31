@@ -4,8 +4,7 @@
 # MAY CONTAIN TECHNICAL DATA
 #
 # Author: Scott Felch
-# Build date: 6/12/17
-# Last updated: 7/28/17
+# Build date: 7/31/17
 #
 # Note: If the location or name of files changes on the
 #       network, that will disrupt this script. File paths
@@ -40,7 +39,7 @@ WL_DEST = 'Z:\\MCL Back-up\\Working list\\'
 
 # Copy file from 'src' absolute path to 'dest' absolute path
 def copy(src, dest):
-    print('copy(\'{0}\' , \'{1}\')\n'.format(src, dest))
+    # print('copy(\'{0}\' , \'{1}\')\n'.format(src, dest))
 
     if (os.path.isfile(src)):
         shutil.copy(src, dest)
@@ -55,23 +54,20 @@ def create_temp(file_path):
         return
 
     os.rename(file_path, file_path + '.TMP')
-    print('Marked temp:\t', file_path)
 
 
 def del_temp(file_path):
-    print('Entered del_temp():')
     file_dir = file_path
     while (file_dir[-1] != '\\'):
         file_dir = file_dir[:len(file_dir) - 1]
 
-    print('file_path:\t\'{}\'\nfile_dir:\t\'{}\''.format(file_path, file_dir))
-
     rm_temp = file_path + '.TMP'
     os.unlink(rm_temp)
-    print('Deleted:\t', rm_temp)
 
 
 def verify_data(src, dest):
+    filename = src.split('\\')[-1]
+
     src_md5_hasher = hashlib.md5()
     src_sha1_hasher = hashlib.sha1()
 
@@ -94,22 +90,22 @@ def verify_data(src, dest):
         buf = sha1_file.read()
         dest_sha1_hasher.update(buf)
 
-    print(src, ' integrity check...')
-    print('md5:\t', src_md5_hasher.hexdigest())
-    print('sha1:\t', src_sha1_hasher.hexdigest())
-
-    print(dest, ' integrity check...')
-    print('md5:\t', dest_md5_hasher.hexdigest())
-    print('sha1:\t', dest_sha1_hasher.hexdigest())
+    print('\t\'{}\' integrity check:'.format(filename))
 
     if (src_md5_hasher.hexdigest() == dest_md5_hasher.hexdigest()):
-        print('MD5 check:\tok!')
+        print('md5:\t{}\t\t\t[OK]'.format(src_md5_hasher.hexdigest()))
     else:
-        print('MD5 check:\tfailed!')
+        print('\t\tmd5 mismatch:\t', filename)
+        print('\tsource:\t', src_md5_hasher.hexdigest())
+        print('\tdest:\t', dest_md5_hasher.hexdigest())
+        print('\t\tMD5 check:\tfailed!')
         return False
     if (src_sha1_hasher.hexdigest() == dest_sha1_hasher.hexdigest()):
-        print('SHA1 check:\tok!')
+        print('sha1:\t{}\t\t[OK]'.format(src_sha1_hasher.hexdigest()))
     else:
+        print('\t\tsha1 mismatch:\t', filename)
+        print('source:\t', src_sha1_hasher.hexdigest())
+        print('dest:\t', dest_sha1_hasher.hexdigest())
         print('SHA1 check:\tfailed!')
         return False
 
@@ -128,7 +124,6 @@ def uncreate_temp(path):
     while(trim_path[:-4] == '.TMP'):
         os.rename(trim_path, trim_path[:-4])
         trim_path = trim_path[:-4]
-    print('Unmarked temp:\t{}'.format(path))
 
 
 def main():
@@ -155,19 +150,26 @@ def main():
                   BOND_QUAL_DEST_1, BOND_QUAL_DEST_2, BOND_QUAL_DEST_3,
                   wl_dest]
 
-    print('Transfer initiating...')
+    print('======================================================')
+    print('==              Transfer initiating...              ==')
+    print('======================================================')
+    print()
     for curr_file in range(len(src_files)):
         create_temp(dest_files[curr_file])
         copy(src_files[curr_file], dest_files[curr_file])
         if (verify_data(src_files[curr_file], dest_files[curr_file])):
             del_temp(dest_files[curr_file])
-            print('\n{}s transferred successfully.'.
-                  format(dest_files[curr_file]))
         else:
-            print('\n{} transferred failed!'.format(dest_files[curr_file]))
-            print('Transfer aborted, thumb drive files unchanged.')
+            print('======================================================')
+            print('==       Failed! thumb drive files unchanged.       ==')
+            print('======================================================')
             uncreate_temp(dest_files[curr_file])
 
+    print()
+    print('======================================================')
+    print('==                     Success!                     ==')
+    print('======================================================')
+    print()
     os.system('pause')  # 'press any key to continue'
 
 
