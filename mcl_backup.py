@@ -39,8 +39,6 @@ WL_DEST = 'Z:\\MCL Back-up\\Working list\\'
 
 # Copy file from 'src' absolute path to 'dest' absolute path
 def copy(src, dest):
-    # print('copy(\'{0}\' , \'{1}\')\n'.format(src, dest))
-
     if (os.path.isfile(src)):
         shutil.copy(src, dest)
 
