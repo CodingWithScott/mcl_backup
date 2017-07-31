@@ -70,13 +70,6 @@ def del_temp(file_path):
     os.unlink(rm_temp)
     print('Deleted:\t', rm_temp)
 
-    # # https://automatetheboringstuff.com/chapter9/
-    # for filename in os.listdir(file_dir):
-    #     if filename.endswith('.TMP'):
-    #         full_path = file_path + filename
-    #         print('full_path:\t\'{}\''.format(full_path))
-    #         os.unlink(full_path)
-
 
 def verify_data(src, dest):
     src_md5_hasher = hashlib.md5()
@@ -168,9 +161,10 @@ def main():
         copy(src_files[curr_file], dest_files[curr_file])
         if (verify_data(src_files[curr_file], dest_files[curr_file])):
             del_temp(dest_files[curr_file])
-            print('\n%s transferred successfully.' % dest_files[curr_file])
+            print('\n{}s transferred successfully.'.
+                  format(dest_files[curr_file]))
         else:
-            print('\n%s transferred failed!' % dest_files[curr_file])
+            print('\n{} transferred failed!'.format(dest_files[curr_file]))
             print('Transfer aborted, thumb drive files unchanged.')
             uncreate_temp(dest_files[curr_file])
 
